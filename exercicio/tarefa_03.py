@@ -13,7 +13,6 @@ import heapq
 # Digite origem, destino e peso da aresta 3 (separados por espaço): B C 5
 # Digite origem, destino e peso da aresta 4 (separados por espaço): B D 10
 # Digite origem, destino e peso da aresta 5 (separados por espaço): C D 3
-import heapq
 
 def dijkstra(graph, start):
     # Inicialização das estruturas de dados
