@@ -1,25 +1,33 @@
-def troco_guloso(valor, moedas):
-    # Se o valor do troco for zero, não são necessárias moedas
-    if valor == 0:
-        return 0
-    
-    min_moedas = float('inf')  # Inicializa o número mínimo de moedas com um valor muito grande
-    
-    for moeda in moedas:
-        if moeda <= valor:
-            # Chama recursivamente a função para calcular o número mínimo de moedas
-            # necessário para o troco restante após usar uma moeda atual
-            qtd_moedas = 1 + troco_guloso(valor - moeda, moedas)
-            
-            # Atualiza o número mínimo de moedas, se necessário
-            if qtd_moedas < min_moedas:
-                min_moedas = qtd_moedas
-                
-    return min_moedas
 
-# Input dos valores
-troco = int(input("Digite o valor do troco: "))
-moedas_algorithia = list(map(int, input("Digite os valores das moedas separados por espaço: ").split()))
+def calcular_troco_minimo_recursivo(valor_troco, tipos_de_moedas):
+    # Se o troco for zero, não são necessárias moedas
+    if valor_troco == 0:
+        return 0, []
 
-# Chama a função para encontrar o número mínimo de moedas usando o algoritmo guloso recursivo
-print("Número mínimo de moedas usando o algoritmo guloso recursivo:", troco_guloso(troco, moedas_algorithia))
+    menor_qtd_moedas = float('inf')  # Inicialização da menor quantidade de moedas como infinito
+    melhor_combinacao = None  # Inicialização da melhor combinação de moedas como nula
+
+    # Para cada tipo de moeda disponível, procuramos a melhor combinação
+    for tipo_moeda in sorted(tipos_de_moedas, reverse=True):
+        if tipo_moeda <= valor_troco:
+            # Chamada recursiva para calcular o troco do valor restante
+            qtd_moedas, combinacao_resto = calcular_troco_minimo_recursivo(valor_troco - tipo_moeda, tipos_de_moedas)
+            qtd_moedas += 1  # Adicionamos uma moeda do tipo atual
+
+            # Verificamos se esta combinação é melhor que a anterior
+            if qtd_moedas < menor_qtd_moedas:
+                menor_qtd_moedas = qtd_moedas
+                melhor_combinacao = [tipo_moeda] + combinacao_resto
+
+    return menor_qtd_moedas, melhor_combinacao
+
+# Valores utilizados para demonstrar o cálculo do troco mínimo
+valor_da_compra = 37
+tipos_de_moedas_usadas = [1, 5, 10, 21, 25]
+
+# Chamada da função para calcular o troco mínimo
+qtd_min_moedas, combinacao_usada = calcular_troco_minimo_recursivo(valor_da_compra, tipos_de_moedas_usadas)
+
+# Impressão dos resultados
+print(f"Número mínimo de moedas: {qtd_min_moedas}")
+print(f"Conjunto de moedas utilizado: {combinacao_usada}")
