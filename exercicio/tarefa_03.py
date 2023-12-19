@@ -1,19 +1,5 @@
 import heapq
 
-# Exemplo de usar o progama
-
-# Digite o número de vértices: 4
-# Digite o nome do vértice 1: A
-# Digite o nome do vértice 2: B
-# Digite o nome do vértice 3: C
-# Digite o nome do vértice 4: D
-# Digite o número de arestas: 5
-# Digite origem, destino e peso da aresta 1 (separados por espaço): A B 4
-# Digite origem, destino e peso da aresta 2 (separados por espaço): A C 2
-# Digite origem, destino e peso da aresta 3 (separados por espaço): B C 5
-# Digite origem, destino e peso da aresta 4 (separados por espaço): B D 10
-# Digite origem, destino e peso da aresta 5 (separados por espaço): C D 3
-
 def dijkstra(graph, start):
     # Inicialização das estruturas de dados
     distances = {vertex: float('inf') for vertex in graph}
