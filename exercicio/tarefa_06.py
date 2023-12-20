@@ -1,49 +1,50 @@
-def particionar_tres_vias(arr, baixo, alto):
-    # Verifica e troca a ordem dos elementos baixo e alto, se necessário
-    if arr[baixo] > arr[alto]:
-        arr[baixo], arr[alto] = arr[alto], arr[baixo]
+def particionar_tres_vias(arr, baixo, alto, pivo1, pivo2):
+    i = baixo
+    j = baixo
+    k = alto
 
-    # Define os pivôs
-    pivô1 = arr[baixo]
-    pivô2 = arr[alto]
-
-    # Inicialização dos índices para particionamento
-    esquerda = baixo + 1
-    direita = alto - 1
-    i = baixo + 1
-
-    while i <= direita:
-        if arr[i] < pivô1:
-            arr[i], arr[esquerda] = arr[esquerda], arr[i]
-            esquerda += 1
+    while j <= k:
+        if arr[j] < pivo1:
+            # Troca elementos menores que o primeiro pivô para a região dos menores
+            arr[i], arr[j] = arr[j], arr[i]
             i += 1
-        elif arr[i] > pivô2:
-            arr[i], arr[direita] = arr[direita], arr[i]
-            direita -= 1
+            j += 1
+        elif pivo1 <= arr[j] <= pivo2:
+            # Elementos entre os dois pivôs permanecem na região do meio
+            j += 1
         else:
-            i += 1
+            # Troca elementos maiores que o segundo pivô para a região dos maiores
+            arr[j], arr[k] = arr[k], arr[j]
+            k -= 1
 
-    # Coloca os pivôs em suas posições corretas
-    arr[esquerda - 1], arr[baixo] = arr[baixo], arr[esquerda - 1]
-    arr[direita + 1], arr[alto] = arr[alto], arr[direita + 1]
-
-    return esquerda - 1, direita + 1
+    return i, k
 
 
 def quicksort_tres_vias(arr, baixo, alto):
     if baixo < alto:
-        esquerda, direita = particionar_tres_vias(arr, baixo, alto)
-        quicksort_tres_vias(arr, baixo, esquerda - 1)
-        quicksort_tres_vias(arr, esquerda + 1, direita - 1)
-        quicksort_tres_vias(arr, direita + 1, alto)
+        # Seleciona os pivôs inicial e final
+        pivo1 = arr[baixo]
+        pivo2 = arr[alto]
+
+        if pivo1 > pivo2:
+            pivo1, pivo2 = pivo2, pivo1
+
+        # Particiona a lista em três partes
+        menor, maior = particionar_tres_vias(arr, baixo + 1, alto - 1, pivo1, pivo2)
+
+        # Coloca os pivôs na posição correta
+        arr[baixo], arr[menor - 1] = arr[menor - 1], arr[baixo]
+        arr[alto], arr[maior + 1] = arr[maior + 1], arr[alto]
+
+        # Chama a ordenação recursiva para as três regiões
+        quicksort_tres_vias(arr, baixo, menor - 1)
+        quicksort_tres_vias(arr, menor, maior)
+        quicksort_tres_vias(arr, maior + 1, alto)
 
 
-# Entrada dos dados
-n = int(input("Digite o tamanho da lista: "))
-lista = list(map(int, input("Digite os elementos da lista separados por espaço: ").split()))
+# Exemplo de uso:
+arr = [4, 2, 7, 3, 1, 6, 5]
+print("Array antes da ordenação:", arr)
+quicksort_tres_vias(arr, 0, len(arr) - 1)
+print("Array depois da ordenação:", arr)
 
-# Chamada da função de ordenação
-quicksort_tres_vias(lista, 0, n - 1)
-
-# Saída dos dados ordenados
-print("Lista ordenada:", lista)
